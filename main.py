@@ -7,8 +7,8 @@ from pathlib import Path
 
 
 def find_files(target: Path) -> list[Path]:
-    result = subprocess.check_output(["git", "ls-files"], text=True, cwd=target)
-    return [target / Path(line) for line in result.splitlines()]
+    result = subprocess.check_output(["git", "ls-files", "-z"], cwd=target)
+    return [target / Path(p) for p in result.decode().split("\0") if p]
 
 
 def collect_locs(target: Path):
